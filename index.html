@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horror Experience</title>
+<style>
+html,body{margin:0;padding:0;height:100%;overflow:hidden;background:black;}
+body{font-family:monospace;color:red;}
+#bgImage{
+  position:fixed; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:1; opacity:0; 
+  animation:fadeIn 2s forwards;
+}
+@keyframes fadeIn{to{opacity:1;}}
+#flash{position:fixed;top:0;left:0;width:100%;height:100%;background:white;opacity:0;z-index:10;}
+.popup{
+  position:fixed;background:rgba(255,0,0,0.95);color:white;padding:20px;font-size:18px;
+  border:3px solid #fff; box-shadow:0 0 20px red; z-index:5; display:none;
+}
+@keyframes shake {
+  0%{transform:translate(1px,1px) rotate(0deg);}
+  10%{transform:translate(-1px,-2px) rotate(-1deg);}
+  20%{transform:translate(-3px,0px) rotate(1deg);}
+  30%{transform:translate(3px,2px) rotate(0deg);}
+  40%{transform:translate(1px,-1px) rotate(1deg);}
+  50%{transform:translate(-1px,2px) rotate(-1deg);}
+  60%{transform:translate(-3px,1px) rotate(0deg);}
+  70%{transform:translate(3px,1px) rotate(-1deg);}
+  80%{transform:translate(-1px,-1px) rotate(1deg);}
+  90%{transform:translate(1px,2px) rotate(0deg);}
+  100%{transform:translate(1px,-2px) rotate(-1deg);}
+}
+</style>
+</head>
+<body>
+<img id="bgImage" src="https://hips.hearstapps.com/hmg-prod/images/babadook-1-1624996028.png?crop=0.9254498714652957xw:1xh;center,top" alt="Babadook">
+<div id="flash"></div>
+<div class="popup" id="popup1" style="top:20%;left:10%;">SYSTEM WARNING: Virus detected!</div>
+<div class="popup" id="popup2" style="top:50%;left:60%;">ERROR: Critical system failure!</div>
+
+<audio id="sound1"><source src="creepy-sound.mp3" type="audio/mp3"></audio>
+<audio id="sound2"><source src="scream.mp3" type="audio/mp3"></audio>
+
+<script>
+// Utility for flash
+function flash(times=4){
+  const f=document.getElementById('flash');
+  let i=0;
+  const interval=setInterval(()=>{
+    f.style.opacity=i%2?'1':'0';
+    i++;
+    if(i>times*2){clearInterval(interval); f.style.opacity='0';}
+  },80);
+}
+
+// Shake the screen
+function shakeScreen(duration=1000){
+  document.body.style.animation='shake 0.1s infinite';
+  setTimeout(()=>{document.body.style.animation='';},duration);
+}
+
+// Show popups
+function showPopups(){
+  document.getElementById('popup1').style.display='block';
+  document.getElementById('popup2').style.display='block';
+}
+
+// Play sounds
+function playSounds(){
+  document.getElementById('sound1').play().catch(()=>{});
+  setTimeout(()=>{document.getElementById('sound2').play().catch(()=>{});}, 500);
+}
+
+// Jump-scare sequence
+function jumpScare(){
+  flash(6);
+  shakeScreen(1500);
+  showPopups();
+  playSounds();
+}
+
+// Start jump-scare after 2 seconds
+setTimeout(jumpScare,2000);
+</script>
+</body>
+</html>
